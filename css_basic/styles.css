@@ -1,0 +1,41 @@
+main {
+    display: flex;
+    flex-direction: row;
+    flex: auto;
+    background-color: skyblue;
+    border-radius: 40px;
+    }
+    
+    body {
+        flex-direction: column;
+        
+        
+    }
+    
+    article{
+        flex: 2;
+        overflow-y: auto;
+        
+    }
+    aside{
+        flex: 1;
+        overflow-y: auto;
+        background-color: brown;
+        border-radius: 30px;
+    }
+    
+    header {
+       margin: auto; 
+       background-color: ghostwhite;
+       border-radius: 20px;
+       display: grid;
+       place-items: center;
+    
+    }
+    footer{
+        margin: auto;
+        background-color: burlywood;
+        border-radius: 25px;
+        display: grid;
+        place-items: center;
+    }
