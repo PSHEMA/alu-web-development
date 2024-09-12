@@ -11,6 +11,7 @@ class FIFOCache(BaseCaching):
     def __init__(self):
         """ Initiliaze
         """
+        self.cache_data = {}
         super().__init__()
 
     def put(self, key, item):
@@ -18,11 +19,11 @@ class FIFOCache(BaseCaching):
         """
         if key is None or item is None:
             return
-        if key in self.cache_data:
-            self.cache_data.pop(key)
-        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            print("DISCARD: {}".format(self.cache_data.popitem(last=False)[0]))
-        self.cache_data[key] = item
+
+        if len(self.cache_data) >= BaseCaching.MAX_ITEMS and key not in self.cache_data:
+            first_key = next(iter(self.cache_data))
+            print("DISCARD: {}".format(first_key))
+            del self.cache_data[first_key]
 
     def get(self, key):
         """ Get an item by key
