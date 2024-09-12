@@ -1,39 +1,33 @@
 #!/usr/bin/python3
-""" MRU caching module
 """
-
+MRUCache class that inherits from BaseCaching and is a caching system
+"""
 BaseCaching = __import__('base_caching').BaseCaching
 
 
 class MRUCache(BaseCaching):
-    """ MRU caching system
-    """
+    """ Define MRUCache """
 
     def __init__(self):
-        """ Initiliaze
-        """
+        """ Initialize MRUCache """
+        self.stack = []
         super().__init__()
 
     def put(self, key, item):
-        """ Add an item in the cache
-        """
-        if key is None or item is None:
-            return
-
-        if (
-            len(self.cache_data) >= BaseCaching.MAX_ITEMS and 
-            key not in self.cache_data
-        ):
-            mru_key = next(reversed(self.cache_data))
-            print("DISCARD: {}".format(mru_key))
-            del self.cache_data[mru_key]
-
-        self.cache_data[key] = item
+        """ Assign the item to the dictionary """
+        if key and item:
+            if self.cache_data.get(key):
+                self.stack.remove(key)
+            while len(self.stack) >= self.MAX_ITEMS:
+                delete = self.stack.pop()
+                self.cache_data.pop(delete)
+                print('DISCARD: {}'.format(delete))
+            self.stack.append(key)
+            self.cache_data[key] = item
 
     def get(self, key):
-        """ Get an item by key
-        """
-        if key is None or key not in self.cache_data:
-            return None
-
+        """ Return the value associated with the given key """
+        if self.cache_data.get(key):
+            self.stack.remove(key)
+            self.stack.append(key)
         return self.cache_data.get(key)
