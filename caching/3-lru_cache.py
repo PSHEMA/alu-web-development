@@ -20,10 +20,13 @@ class LRUCache(BaseCaching):
         if key is None or item is None:
             return
 
-        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            least_recently_used = min(self.cache_data, key=self.cache_data.get)
-            print("DISCARD: {}".format(least_recently_used))
-            del self.cache_data[least_recently_used]
+        if (
+            len(self.cache_data) >= BaseCaching.MAX_ITEMS
+            and key not in self.cache_data
+        ):
+            lru_key = next(iter(self.cache_data))
+            print("DISCARD: {}".format(lru_key))
+            del self.cache_data[lru_key]
 
         self.cache_data[key] = item
 
