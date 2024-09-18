@@ -4,7 +4,7 @@
 from flask import jsonify, request, abort
 from api.v1.views import app_views
 from models.user import User
-import os 
+import os
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
@@ -31,7 +31,6 @@ def login() -> str:
     if not user.is_valid_password(password):
         return jsonify({"error": "wrong password"}), 401
 
-    
     from api.v1.app import auth
     session_id = auth.create_session(user.id)
     if session_id is None:
