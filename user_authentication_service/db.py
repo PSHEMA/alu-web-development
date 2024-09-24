@@ -20,12 +20,14 @@ class DB:
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
-        self.__session = sessionmaker(bind=self._engine)
+        self.__Session = sessionmaker(bind=self._engine)  # Create a session factory
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """ Add user
         """
+        session = self.__Session()  # Create an actual session object
         user = User(email=email, hashed_password=hashed_password)
-        self.__session.add(user)
-        self.__session.commit()
+        session.add(user)  # Add the user to the session
+        session.commit()  # Commit the transaction
+        session.close()  # Close the session after the transaction
         return user
