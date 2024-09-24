@@ -1,33 +1,31 @@
 #!/usr/bin/env python3
-""" create user
+"""DB module
 """
-
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from user import Base, User
 
-Base = declarative_base()
-
-
 class DB:
-    """ Database
-    """
-
+    """Class to manage the MySQL database."""
     def __init__(self):
-        """ Init method
-        """
-        self._engine = create_engine("sqlite:///a.db", echo=False)
+        """Initialize a new DB instance."""
+        self._engine = create_engine("sqlite:///a.db", echo=True)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
-        self.__Session = sessionmaker(bind=self._engine)  # Create a session factory
+        self.__session = None
+
+    @property
+    def _session(self):
+        """Private session property to create the session when needed."""
+        if self.__session is None:
+            DBSession = sessionmaker(bind=self._engine)
+            self.__session = DBSession()
+        return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """ Add user
-        """
-        session = self.__Session()  # Create an actual session object
-        user = User(email=email, hashed_password=hashed_password)
-        session.add(user)  # Add the user to the session
-        session.commit()  # Commit the transaction
-        session.close()  # Close the session after the transaction
-        return user
+        """Adds a user to the database with the provided email and hashed_password."""
+        new_user = User(email=email, hashed_password=hashed_password)
+        self._session.add(new_user)
+        self._session.commit()
+        return new_user
