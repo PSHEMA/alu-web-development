@@ -35,8 +35,7 @@ class DB:
         """ find user by method """
         if not kwargs:
             raise InvalidRequestError
-        for key in kwargs:
-            if not hasattr(User, key):
-                raise NoResultFound
+        if User is None:
+            raise NoResultFound
 
         return self._session.query(User).filter_by(**kwargs).first()
