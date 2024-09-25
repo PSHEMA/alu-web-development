@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from user import Base, User
-from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.exc import InvalidRequestError, NoResultFound
 
 
 class DB:
@@ -38,5 +38,7 @@ class DB:
         for key in kwargs:
             if not hasattr(User, key):
                 raise InvalidRequestError
+        if User is None:
+            raise NoResultFound
 
         return self._session.query(User).filter_by(**kwargs).first()
