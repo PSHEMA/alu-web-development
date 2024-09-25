@@ -19,7 +19,8 @@ def users() -> str:
     password = flask.request.form.get("password")
     try:
         user = auth.register_user(email, password)
-        return flask.jsonify({"email": user.email, "message": "user created"}), 200
+        return flask.jsonify({"email": user.email, 
+                              "message": "user created"}), 200
     except ValueError:
         return flask.jsonify({"message": "email already registered"}), 400
 
