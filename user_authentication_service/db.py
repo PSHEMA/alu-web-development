@@ -36,17 +36,10 @@ class DB:
         """ find user by method """
         if not kwargs:
             raise InvalidRequestError("No criteria provided")
-        
-        # Check for invalid attributes
         for key in kwargs:
             if not hasattr(User, key):
                 raise InvalidRequestError(f"Invalid attribute: {key}")
-
-        # Query the database
         user = self._session.query(User).filter_by(**kwargs).first()
-
-        # Raise NoResultFound if no user is found
         if user is None:
             raise NoResultFound("User not found")
-
         return user
