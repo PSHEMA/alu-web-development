@@ -34,5 +34,22 @@ def index() -> str:
     return flask.jsonify({"message": "Bienvenue"})
 
 
+@app.route("/sessions", methods=["POST"], strict_slashes=False)
+def login() -> str:
+    """ POST /sessions
+    Login
+    """
+    email = flask.request.form.get("email")
+    password = flask.request.form.get("password")
+    try:
+        user = auth.valid_login(email, password)
+        session_id = auth.create_session(user.id)
+        resp = flask.jsonify({"email": user.email, "message": "logged in"})
+        resp.set_cookie("session_id", session_id)
+        return resp
+    except Exception:
+        return flask.jsonify({"message": "wrong email or password"}), 401
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
