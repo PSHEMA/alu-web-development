@@ -85,16 +85,12 @@ def reset_password() -> str:
       - empty JSON
       - 403 if the user is not authenticated
     """
-    email = request.form.get('email')
-    if not email:
-        abort(403)
     try:
-        AUTH.get_user_from_session_id(email)
+        email = request.form.get('email')
+        token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": email, "reset_token": token}), 200
+    except ValueError:
         abort(403)
-    except Exception:
-        pass
-    token = AUTH.get_reset_password_token(email)
-    return jsonify({"email": email, "reset_token": token}), 200
 
 
 if __name__ == "__main__":
