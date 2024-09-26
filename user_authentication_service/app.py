@@ -7,7 +7,7 @@ import flask
 from auth import Auth
 
 app = Flask(__name__)
-auth = Auth()
+AUTH = Auth()  # Renamed 'auth' to 'AUTH' to match the test expectation
 
 
 @app.route("/users", methods=["POST"], strict_slashes=False)
@@ -18,7 +18,7 @@ def users() -> str:
     email = flask.request.form.get("email")
     password = flask.request.form.get("password")
     try:
-        user = auth.register_user(email, password)
+        user = AUTH.register_user(email, password)
         return flask.jsonify({"email": user.email,
                               "message": "user created"}), 200
     except ValueError:
@@ -41,9 +41,9 @@ def login():
     password = request.form.get('password')
     if not email or not password:
         return jsonify({'error': 'Missing email or password'}), 400
-    if not auth.valid_login(email, password):
+    if not AUTH.valid_login(email, password):
         abort(401)
-    session_id = auth.create_session(email)
+    session_id = AUTH.create_session(email)
     response = jsonify({'email': email, 'message': 'logged in'})
     response.set_cookie('session_id', session_id)
     return response
