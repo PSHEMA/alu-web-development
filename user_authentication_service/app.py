@@ -7,7 +7,7 @@ import flask
 from auth import Auth
 
 app = Flask(__name__)
-AUTH = Auth()  # Renamed 'auth' to 'AUTH' to match the test expectation
+AUTH = Auth()
 
 
 @app.route("/users", methods=["POST"], strict_slashes=False)
