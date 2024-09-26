@@ -35,19 +35,16 @@ def index() -> str:
 
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
-def login() -> str:
-    """ POST /sessions
-    Login
-    """
-    email = flask.request.form.get("email")
-    password = flask.request.form.get("password")
-    if Auth.valid_login(email, password):
-        session_id = auth.create_session(email)
-        resp = flask.jsonify({"email": email, "message": "logged in"})
-        resp.set_cookie("session_id", session_id)
-        return resp
-    else:
-        flask.abort(401)
+def login():
+    """ Log in """
+    email = request.form.get('email')
+    password = request.form.get('password')
+    if Auth.valid_login(email, password) is False:
+        abort(401)
+    session_id = auth.create_session(email)
+    response = jsonify({'email': email, 'message': 'logged in'})
+    response.set_cookie('session_id', session_id)
+    return response
 
 
 if __name__ == "__main__":
