@@ -78,12 +78,12 @@ def profile() -> str:
     return jsonify({"email": user.email}), 200
 
 
-app.route("/reset_password", methods=["POST"], strict_slashes=False)
+@app.route("/reset_password", methods=["POST"], strict_slashes=False)
 def get_reset_password_token() -> str:
     """ POST /reset_password
     Return:
-      - empty JSON
-      - 403 if the user is not authenticated
+      - JSON response with reset token
+      - 403 if the email is not registered
     """
     try:
         email = request.form.get('email')
